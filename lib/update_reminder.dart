@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateReminderPage extends StatefulWidget {
   const UpdateReminderPage({Key? key}) : super(key: key);
@@ -14,6 +15,65 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
 
   String dateTime = '';
   bool enabled = false;
+
+  int? len = 0;
+  List<String>? l1;
+  List<String>? l2;
+  List<String>? l3;
+  List<String>? l4;
+
+  Future<bool> getTitle() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    l1 = prefs.getStringList('items_title');
+    len = l1?.length;
+
+    for (int i = 0; i < len!; i++) {
+      if (l1![i] == title.text.trim().toLowerCase()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void updateDetails() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // l1 = prefs.getStringList('items_title');
+    l2 = prefs.getStringList('items_desc');
+    l3 = prefs.getStringList('items_date');
+    l4 = prefs.getStringList('items_time');
+
+    // len = l1?.length;
+
+    for (int i = 0; i < len!; i++) {
+      if (l1![i] == title.text.trim().toLowerCase()) {
+        // l1?.removeAt(i);
+        // l2?.removeAt(i);
+        // l3?.removeAt(i);
+        // l4?.removeAt(i);
+        l1![i] = title.text.trim().toLowerCase();
+        l2![i] = desc.text.trim().toLowerCase();
+        l3![i] = dateTime;
+        l4![i] = time.text;
+        break;
+      }
+      // if (i == len! - 1) {
+      //   return false;
+      // }
+    }
+
+    await prefs.setStringList('items_title', l1!);
+    await prefs.setStringList('items_desc', l2!);
+    await prefs.setStringList('items_date', l3!);
+    await prefs.setStringList('items_time', l4!);
+
+    print(prefs.getStringList('items_title'));
+    print(prefs.getStringList('items_desc'));
+    print(prefs.getStringList('items_date'));
+    print(prefs.getStringList('items_time'));
+
+    // return true;
+  }
 
   void selectDate() {
     showDatePicker(
@@ -149,12 +209,12 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 165,
-                        right: 165,
+                        left: 155,
+                        right: 155,
                       ),
                       child: TextField(
                         controller: time,
@@ -184,20 +244,33 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
                 )
               : Container(),
           InkWell(
-            onTap: () {
-              if (enabled) {
+            onTap: () async {
+              if (title.text.trim().isEmpty) {
+                showInSnackBar(
+                    value: 'Please enter the title', context: context);
+              } else if (!enabled) {
+                if (await getTitle()) {
+                  setState(() {
+                    enabled = true;
+                  });
+                } else {
+                  showInSnackBar(
+                      value: 'No such reminder exist', context: context);
+                }
+              } else if (desc.text.trim().isEmpty) {
+                showInSnackBar(
+                    value: 'Please enter the description', context: context);
+              } else if (dateTime.isEmpty) {
+                showInSnackBar(
+                    value: 'Please enter the date', context: context);
+              } else if (time.text.trim().isEmpty) {
+                showInSnackBar(
+                    value: 'Please enter the time', context: context);
+              } else if (enabled) {
+                updateDetails();
                 showInSnackBar(
                     value: 'Reminder updated successfully', context: context);
                 Navigator.pop(context);
-              } else if (title.text.trim().isEmpty) {
-                showInSnackBar(
-                    value: 'Please enter the title', context: context);
-              } else if (title.text.trim().isNotEmpty) {
-                setState(() {
-                  enabled = true;
-                });
-              } else if (time.text.trim().isEmpty) {
-                showInSnackBar(value: 'Please enter time', context: context);
               }
             },
             child: Container(
@@ -212,7 +285,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: const Text(
-                'Set',
+                'Update',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,

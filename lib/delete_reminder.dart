@@ -12,10 +12,10 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
   TextEditingController title = TextEditingController();
 
   int? len = 0;
-  late final List<String>? l1;
-  late final List<String>? l2;
-  late final List<String>? l3;
-  late final List<String>? l4;
+  List<String>? l1;
+  List<String>? l2;
+  List<String>? l3;
+  List<String>? l4;
 
   Future<bool> getDetails() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

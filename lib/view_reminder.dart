@@ -12,24 +12,33 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
   // late final List<bool> isChecked;
 
   int? len = 0;
-  late final List<String>? l1;
-  late final List<String>? l2;
-  late final List<String>? l3;
-  late final List<String>? l4;
-  // late final List<String>? l5;
+  List<String>? keys;
+  List<String>? description;
+  List<String>? date;
+  List<String>? tim;
+  List<String>? check;
 
   void getDetails() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    l1 = prefs.getStringList('items_title');
-    l2 = prefs.getStringList('items_desc');
-    l3 = prefs.getStringList('items_date');
-    l4 = prefs.getStringList('items_time');
-    // l5 = prefs.getStringList('items_check');
+    keys = prefs.getStringList('items_title');
+    description = prefs.getStringList('items_desc');
+    date = prefs.getStringList('items_date');
+    tim = prefs.getStringList('items_time');
+    check = prefs.getStringList('items_check');
+
+    if (keys == null || keys == 'null' || keys == '') {
+      keys = [];
+      description = [];
+      date = [];
+      tim = [];
+      check = [];
+    }
 
     setState(() {
-      len = l1?.length;
+      len = keys?.length;
     });
+    print(prefs.getStringList('items_title'));
 
     // print(l5);
     // for (int i = 0; i < len!; i++) {
@@ -78,27 +87,33 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
                         fit: BoxFit.cover,
                       ),
                       title: Text(
-                        '${l1![index].substring(0, 1).toUpperCase()}${l1![index].substring(1).toLowerCase()}',
+                        '${keys![index].substring(0, 1).toUpperCase()}${keys![index].substring(1).toLowerCase()}',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       subtitle: Text(
-                        '${l2![index].substring(0, 1).toUpperCase()}${l2![index].substring(1).toLowerCase()}',
+                        '${description![index].substring(0, 1).toUpperCase()}${description![index].substring(1).toLowerCase()}',
                         style: const TextStyle(
                           fontSize: 18,
                         ),
                       ),
                       trailing: Checkbox(
-                        value: true,
+                        value: check![index] == 'true',
                         // value: isChecked[index],
-                        onChanged: (bool? value) {},
-                        // onChanged: (bool? value) {
-                        //   setState(() {
-                        //     isChecked[index] = value!;
-                        //   });
-                        // },
+                        onChanged: (bool? value) async {
+                          setState(() {
+                            if (check![index] == 'true') {
+                              check![index] = 'false';
+                            } else {
+                              check![index] = 'true';
+                            }
+                          });
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setStringList('items_check', check!);
+                        },
                       ),
                     ),
                     const SizedBox(
@@ -111,7 +126,7 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
                           width: 60,
                         ),
                         Text(
-                          'Date: ${l3![index]}',
+                          'Date: ${date![index]}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.blue,
@@ -121,7 +136,7 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
                           width: 110,
                         ),
                         Text(
-                          'Time: ${l4![index]}',
+                          'Time: ${tim![index]}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.blue,

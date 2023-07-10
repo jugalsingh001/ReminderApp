@@ -15,11 +15,11 @@ class _SetReminderPageState extends State<SetReminderPage> {
   TextEditingController title = TextEditingController();
   TextEditingController desc = TextEditingController();
 
-  static List<String> keys = [];
-  static List<String> description = [];
-  static List<String> date = [];
-  static List<String> tim = [];
-  // static List<String> check = [];
+  static List<String>? keys = [];
+  static List<String>? description = [];
+  static List<String>? date = [];
+  static List<String>? tim = [];
+  static List<String>? check = [];
 
   String dateTime = '';
   // String time = '';
@@ -194,31 +194,39 @@ class _SetReminderPageState extends State<SetReminderPage> {
               } else if (desc.text.trim().isEmpty) {
                 showInSnackBar(
                     value: 'Please enter description', context: context);
-              } else if (time.text.trim().isEmpty) {
-                showInSnackBar(value: 'Please enter time', context: context);
               } else if (dateTime.isEmpty) {
                 showInSnackBar(value: 'Please enter date', context: context);
+              } else if (time.text.trim().isEmpty) {
+                showInSnackBar(value: 'Please enter time', context: context);
               } else {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
 
-                keys = prefs.getStringList('items_title')!;
-                description = prefs.getStringList('items_desc')!;
-                date = prefs.getStringList('items_date')!;
-                tim = prefs.getStringList('items_time')!;
-                // check = prefs.getStringList('items_check')!;
+                keys = prefs.getStringList('items_title');
+                description = prefs.getStringList('items_desc');
+                date = prefs.getStringList('items_date');
+                tim = prefs.getStringList('items_time');
+                check = prefs.getStringList('items_check');
 
-                keys.add(title.text.trim().toLowerCase());
-                description.add(desc.text);
-                date.add(dateTime);
-                tim.add(time.text.trim());
-                // check.add('true');
+                if (keys == null || keys == 'null' || keys == '') {
+                  keys = [];
+                  description = [];
+                  date = [];
+                  tim = [];
+                  check = [];
+                }
 
-                await prefs.setStringList('items_title', keys);
-                await prefs.setStringList('items_desc', description);
-                await prefs.setStringList('items_date', date);
-                await prefs.setStringList('items_time', tim);
-                // await prefs.setStringList('items_check', check);
+                keys?.add(title.text.trim().toLowerCase());
+                description?.add(desc.text);
+                date?.add(dateTime);
+                tim?.add(time.text.trim());
+                check?.add('true');
+
+                await prefs.setStringList('items_title', keys!);
+                await prefs.setStringList('items_desc', description!);
+                await prefs.setStringList('items_date', date!);
+                await prefs.setStringList('items_time', tim!);
+                await prefs.setStringList('items_check', check!);
 
                 // final List<String>? l1 = prefs.getStringList('items_title');
                 // final List<String>? l2 = prefs.getStringList('items_desc');
