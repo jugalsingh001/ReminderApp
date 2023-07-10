@@ -15,11 +15,11 @@ class _SetReminderPageState extends State<SetReminderPage> {
   TextEditingController title = TextEditingController();
   TextEditingController desc = TextEditingController();
 
-  static List<String>? keys = [];
-  static List<String>? description = [];
-  static List<String>? date = [];
-  static List<String>? tim = [];
-  static List<String>? check = [];
+  static List<String>? keys;
+  static List<String>? description;
+  static List<String>? date;
+  static List<String>? tim;
+  static List<String>? check;
 
   String dateTime = '';
   // String time = '';
@@ -228,15 +228,15 @@ class _SetReminderPageState extends State<SetReminderPage> {
                 await prefs.setStringList('items_time', tim!);
                 await prefs.setStringList('items_check', check!);
 
-                // final List<String>? l1 = prefs.getStringList('items_title');
-                // final List<String>? l2 = prefs.getStringList('items_desc');
-                // final List<String>? l3 = prefs.getStringList('items_date');
-                // final List<String>? l4 = prefs.getStringList('items_time');
-                //
-                // print(l1);
-                // print(l2);
-                // print(l3);
-                // print(l4);
+                final List<String>? l1 = prefs.getStringList('items_title');
+                final List<String>? l2 = prefs.getStringList('items_desc');
+                final List<String>? l3 = prefs.getStringList('items_date');
+                final List<String>? l4 = prefs.getStringList('items_time');
+
+                print(l1);
+                print(l2);
+                print(l3);
+                print(l4);
 
                 showInSnackBar(
                     value: 'Reminder set successfully', context: context);

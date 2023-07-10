@@ -31,6 +31,7 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
     // prefs.remove('items_desc');
     // prefs.remove('items_date');
     // prefs.remove('items_time');
+    // prefs.remove('items_check');
 
     for (int i = 0; i < len!; i++) {
       if (l1![i] == title.text.trim().toLowerCase()) {
@@ -115,7 +116,7 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
                 onPressed: () async {
                   if (title.text.trim().isEmpty) {
                     showInSnackBar(
-                        value: 'Please enter title', context: context);
+                        value: 'Please enter the title', context: context);
                   } else {
                     Future<bool> f = getDetails();
 

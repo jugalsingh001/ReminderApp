@@ -94,7 +94,7 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
                         ),
                       ),
                       subtitle: Text(
-                        '${description![index].substring(0, 1).toUpperCase()}${description![index].substring(1).toLowerCase()}',
+                        description![index],
                         style: const TextStyle(
                           fontSize: 18,
                         ),

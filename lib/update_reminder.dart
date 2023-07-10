@@ -52,7 +52,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
         // l3?.removeAt(i);
         // l4?.removeAt(i);
         l1![i] = title.text.trim().toLowerCase();
-        l2![i] = desc.text.trim().toLowerCase();
+        l2![i] = desc.text.trim();
         l3![i] = dateTime;
         l4![i] = time.text;
         break;
