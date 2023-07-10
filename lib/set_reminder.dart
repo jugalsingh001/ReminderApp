@@ -73,6 +73,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
             padding: const EdgeInsets.only(
               left: 20,
               right: 20,
+              top: 10,
             ),
             child: TextFormField(
               controller: title,
@@ -107,6 +108,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
             padding: const EdgeInsets.only(
               left: 20,
               right: 20,
+              top: 10,
             ),
             child: TextFormField(
               controller: desc,
@@ -155,7 +157,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
             ),
           ),
           const SizedBox(
-            height: 15,
+            height: 20,
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -166,7 +168,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
               // maxLength: 5,
               controller: time,
               maxLines: 1,
-              keyboardType: TextInputType.datetime,
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 labelText: 'Time',
                 labelStyle: TextStyle(
@@ -185,7 +187,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
             ),
           ),
           const SizedBox(
-            height: 15,
+            height: 20,
           ),
           InkWell(
             onTap: () async {
