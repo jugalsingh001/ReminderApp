@@ -9,12 +9,13 @@ class UpdateReminderPage extends StatefulWidget {
 }
 
 class _UpdateReminderPageState extends State<UpdateReminderPage> {
-  TextEditingController time = TextEditingController();
+  // TextEditingController time = TextEditingController();
   TextEditingController title = TextEditingController();
   TextEditingController desc = TextEditingController();
 
   String dateTime = '';
   bool enabled = false;
+  String timeDate = '';
 
   int? len = 0;
   List<String>? l1;
@@ -47,14 +48,10 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
 
     for (int i = 0; i < len!; i++) {
       if (l1![i] == title.text.trim().toLowerCase()) {
-        // l1?.removeAt(i);
-        // l2?.removeAt(i);
-        // l3?.removeAt(i);
-        // l4?.removeAt(i);
         l1![i] = title.text.trim().toLowerCase();
         l2![i] = desc.text.trim();
         l3![i] = dateTime;
-        l4![i] = time.text;
+        l4![i] = timeDate;
         break;
       }
       // if (i == len! - 1) {
@@ -71,6 +68,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
     print(prefs.getStringList('items_desc'));
     print(prefs.getStringList('items_date'));
     print(prefs.getStringList('items_time'));
+    print(prefs.getStringList('items_check'));
 
     // return true;
   }
@@ -84,6 +82,17 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
     ).then((value) {
       setState(() {
         dateTime = value!.toString().substring(0, 10);
+      });
+    });
+  }
+
+  void selectTime() {
+    showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    ).then((value) {
+      setState(() {
+        timeDate = value!.format(context).toString();
       });
     });
   }
@@ -109,7 +118,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
           const Text(
             'Title: ',
@@ -187,7 +196,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
                         selectDate();
                       },
                       height: 40,
-                      color: Colors.blueGrey,
+                      color: Colors.blue[800],
                       textColor: Colors.white,
                       child: const Text(
                         'Choose Date',
@@ -209,32 +218,32 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 155,
-                        right: 155,
-                      ),
-                      child: TextField(
-                        controller: time,
-                        maxLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        decoration: const InputDecoration(
-                          labelText: 'Time',
-                          labelStyle: TextStyle(
-                            color: Colors.blue,
-                          ),
-                          hintText: 'HH:MM',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
+                    MaterialButton(
+                      onPressed: () {
+                        selectTime();
+                      },
+                      height: 45,
+                      color: Colors.blue[800],
+                      child: const Text(
+                        'Select Time',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      timeDate,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
                       ),
                     ),
                     const SizedBox(
@@ -263,7 +272,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
               } else if (dateTime.isEmpty) {
                 showInSnackBar(
                     value: 'Please enter the date', context: context);
-              } else if (time.text.trim().isEmpty) {
+              } else if (timeDate.isEmpty) {
                 showInSnackBar(
                     value: 'Please enter the time', context: context);
               } else if (enabled) {

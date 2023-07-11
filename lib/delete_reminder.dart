@@ -16,6 +16,7 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
   List<String>? l2;
   List<String>? l3;
   List<String>? l4;
+  List<String>? l5;
 
   Future<bool> getDetails() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -24,8 +25,12 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
     l2 = prefs.getStringList('items_desc');
     l3 = prefs.getStringList('items_date');
     l4 = prefs.getStringList('items_time');
+    l5 = prefs.getStringList('items_check');
 
     len = l1?.length;
+    if (len == 0) {
+      return false;
+    }
 
     // prefs.remove('items_title');
     // prefs.remove('items_desc');
@@ -39,6 +44,7 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
         l2?.removeAt(i);
         l3?.removeAt(i);
         l4?.removeAt(i);
+        l5?.removeAt(i);
         break;
       }
       if (i == len! - 1) {
@@ -50,8 +56,13 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
     await prefs.setStringList('items_desc', l2!);
     await prefs.setStringList('items_date', l3!);
     await prefs.setStringList('items_time', l4!);
+    await prefs.setStringList('items_check', l5!);
 
     print(prefs.getStringList('items_title'));
+    print(prefs.getStringList('items_desc'));
+    print(prefs.getStringList('items_date'));
+    print(prefs.getStringList('items_time'));
+    print(prefs.getStringList('items_check'));
 
     return true;
   }
