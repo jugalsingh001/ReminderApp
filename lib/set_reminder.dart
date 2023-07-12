@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reminder/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SetReminderPage extends StatefulWidget {
@@ -9,9 +10,15 @@ class SetReminderPage extends StatefulWidget {
 }
 
 class _SetReminderPageState extends State<SetReminderPage> {
-  // TextEditingController date = TextEditingController();
+  NotificationsServices notificationsServices = NotificationsServices();
 
-  // TextEditingController time = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notificationsServices.initialiseNotifications();
+  }
+
   TextEditingController title = TextEditingController();
   TextEditingController desc = TextEditingController();
 
@@ -29,7 +36,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2026),
     ).then((value) {
       setState(() {
@@ -241,11 +248,45 @@ class _SetReminderPageState extends State<SetReminderPage> {
                 await prefs.setStringList('items_time', tim!);
                 await prefs.setStringList('items_check', check!);
 
-                print(prefs.getStringList('items_title'));
-                print(prefs.getStringList('items_desc'));
-                print(prefs.getStringList('items_date'));
-                print(prefs.getStringList('items_time'));
-                print(prefs.getStringList('items_check'));
+                // print(prefs.getStringList('items_title'));
+                // print(prefs.getStringList('items_desc'));
+                // print(prefs.getStringList('items_date'));
+                // print(prefs.getStringList('items_time'));
+                // print(prefs.getStringList('items_check'));
+
+                List dt1 = dateTime.split('-');
+                List td1 = timeDate.split(' ');
+                List td2 = td1[0].split(':');
+
+                List<int> dt2 = [];
+                List<int> td3 = [];
+
+                for (int i = 0; i < dt1.length; i++) {
+                  dt2.add(int.parse(dt1[i]));
+                }
+                print(dt2);
+
+                for (int i = 0; i < td2.length; i++) {
+                  td3.add(int.parse(td2[i]));
+                }
+                print(td3);
+                print(td1[1]);
+
+                notificationsServices.sendNotification(
+                    keys?.length,
+                    dt2[2],
+                    dt2[1],
+                    dt2[0],
+                    td3[0],
+                    td3[1],
+                    td1[1],
+                    title.text.toUpperCase(),
+                    desc.text);
+
+                // notificationsServices.scheduledNotification(
+                //     'Scheduled', 'Notification');
+
+                // notificationsServices.stopNotifications();
 
                 showInSnackBar(
                     value: 'Reminder set successfully', context: context);

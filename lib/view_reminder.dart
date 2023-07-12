@@ -133,7 +133,7 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
                           ),
                         ),
                         const SizedBox(
-                          width: 110,
+                          width: 100,
                         ),
                         Text(
                           'Time: ${tim![index]}',

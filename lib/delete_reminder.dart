@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'notification_service.dart';
+
 class DeleteReminderPage extends StatefulWidget {
   const DeleteReminderPage({Key? key}) : super(key: key);
 
@@ -9,6 +11,15 @@ class DeleteReminderPage extends StatefulWidget {
 }
 
 class _DeleteReminderPageState extends State<DeleteReminderPage> {
+  NotificationsServices notificationsServices = NotificationsServices();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    notificationsServices.initialiseNotifications();
+  }
+
   TextEditingController title = TextEditingController();
 
   int? len = 0;
@@ -38,7 +49,8 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
     // prefs.remove('items_time');
     // prefs.remove('items_check');
 
-    for (int i = 0; i < len!; i++) {
+    int i;
+    for (i = 0; i < len!; i++) {
       if (l1![i] == title.text.trim().toLowerCase()) {
         l1?.removeAt(i);
         l2?.removeAt(i);
@@ -51,6 +63,8 @@ class _DeleteReminderPageState extends State<DeleteReminderPage> {
         return false;
       }
     }
+
+    notificationsServices.stopNotifications(i + 1);
 
     await prefs.setStringList('items_title', l1!);
     await prefs.setStringList('items_desc', l2!);
