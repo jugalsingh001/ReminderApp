@@ -161,7 +161,7 @@ Widget textField(
       child: StatefulBuilder(builder: (ctx, setState) {
         return TextField(
           controller: controller,
-          keyboardType: TextInputType.text,
+          keyboardType: TextInputType.emailAddress,
           obscureText: hide,
           style: const TextStyle(fontSize: 18),
           decoration: InputDecoration(

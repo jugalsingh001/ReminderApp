@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'notification_service.dart';
+
 class ViewReminderPage extends StatefulWidget {
   const ViewReminderPage({Key? key}) : super(key: key);
 
@@ -9,7 +11,7 @@ class ViewReminderPage extends StatefulWidget {
 }
 
 class _ViewReminderPageState extends State<ViewReminderPage> {
-  // late final List<bool> isChecked;
+  NotificationsServices notificationsServices = NotificationsServices();
 
   int? len = 0;
   List<String>? keys;
@@ -39,16 +41,33 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
       len = keys?.length;
     });
     print(prefs.getStringList('items_title'));
+  }
 
-    // print(l5);
-    // for (int i = 0; i < len!; i++) {
-    //   if (l5![i] == 'true') {
-    //     isChecked[i] = true;
-    //   } else {
-    //     isChecked[i] = false;
-    //   }
-    //   print(isChecked[i]);
-    // }
+  void setReminder(int id, String str) {
+    List dt1 = date![id].split('-');
+    List td1 = tim![id].split(' ');
+    List td2 = td1[0].split(':');
+
+    List<int> dt2 = [];
+    List<int> td3 = [];
+
+    for (int i = 0; i < dt1.length; i++) {
+      dt2.add(int.parse(dt1[i]));
+    }
+    print(dt2);
+
+    for (int i = 0; i < td2.length; i++) {
+      td3.add(int.parse(td2[i]));
+    }
+    print(td3);
+    print(td1[1]);
+
+    if (str == 'false') {
+      notificationsServices.stopNotifications(id + 1);
+    } else {
+      notificationsServices.sendNotification(id + 1, dt2[2], dt2[1], dt2[0],
+          td3[0], td3[1], td1[1], keys![id], description![id]);
+    }
   }
 
   @override
@@ -56,6 +75,7 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
     // TODO: implement initState
     super.initState();
     getDetails();
+    notificationsServices.initialiseNotifications();
   }
 
   @override
@@ -106,8 +126,10 @@ class _ViewReminderPageState extends State<ViewReminderPage> {
                           setState(() {
                             if (check![index] == 'true') {
                               check![index] = 'false';
+                              setReminder(index, 'false');
                             } else {
                               check![index] = 'true';
+                              setReminder(index, 'true');
                             }
                           });
                           final SharedPreferences prefs =

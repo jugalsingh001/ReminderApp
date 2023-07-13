@@ -32,6 +32,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
   List<String>? l2;
   List<String>? l3;
   List<String>? l4;
+  List<String>? l5;
 
   Future<bool> getTitle() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -53,6 +54,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
     l2 = prefs.getStringList('items_desc');
     l3 = prefs.getStringList('items_date');
     l4 = prefs.getStringList('items_time');
+    l5 = prefs.getStringList('items_check');
 
     // len = l1?.length;
     int i;
@@ -62,6 +64,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
         l2![i] = desc.text.trim();
         l3![i] = dateTime;
         l4![i] = timeDate;
+        l5![i] = 'true';
         break;
       }
       // if (i == len! - 1) {
@@ -74,6 +77,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
     await prefs.setStringList('items_desc', l2!);
     await prefs.setStringList('items_date', l3!);
     await prefs.setStringList('items_time', l4!);
+    await prefs.setStringList('items_check', l5!);
 
     print(prefs.getStringList('items_title'));
     print(prefs.getStringList('items_desc'));
@@ -109,7 +113,7 @@ class _UpdateReminderPageState extends State<UpdateReminderPage> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2023),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2026),
     ).then((value) {
       setState(() {
